@@ -59,7 +59,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                 Log.i("Position: ", Integer.toString(position));
                 Context context = view.getContext();
                 Intent intent = new Intent(context, MainQuizActivity.class);
-                intent.putExtra("List", Integer.toString(position));
+                intent.putExtra("QuizCategory", Integer.toString(position));
                 context.startActivity(intent);
             }
         });
