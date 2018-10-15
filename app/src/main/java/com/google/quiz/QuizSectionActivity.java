@@ -38,6 +38,9 @@ public class QuizSectionActivity extends AppCompatActivity {
         input.add("Cricket");
         input.add("General Knowledge");
         input.add("Books");
+        input.add("Politics");
+        input.add("Bollywood");
+        input.add("TV Series");
 
         mAdapter = new MyAdapter(input);
         recyclerView.setAdapter(mAdapter);

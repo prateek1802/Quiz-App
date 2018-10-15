@@ -20,9 +20,9 @@ public class MainQuizActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         String quizCategory = intent.getStringExtra("QuizCategory");
-        TextView textView = findViewById(R.id.textView);
+//        TextView textView = findViewById(R.id.textView);
 
-        textView.setText(quizCategory);
+  //      textView.setText(quizCategory);
 
 
     }
