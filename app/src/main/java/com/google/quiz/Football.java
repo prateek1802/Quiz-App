@@ -18,7 +18,7 @@ import java.util.Random;
 
 public class Football extends SQLiteOpenHelper {
     private static final String Database_path = "/data/data/com.google.quiz/databases/";
-    private static final String Database_name = "futball.db";
+    private static final String Database_name = "fut.db";
     private static Context context;
     private static final int version = 1;
     public SQLiteDatabase sqlite;
@@ -94,32 +94,33 @@ public class Football extends SQLiteOpenHelper {
 
     public long getRowCount() {
         SQLiteDatabase db = this.getReadableDatabase();
-        long x = DatabaseUtils.queryNumEntries(db, "futball");
+        long x = DatabaseUtils.queryNumEntries(db, "fut");
         db.close();
         return x;
     }
 
-    public String getOptionA() {
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor c = db.rawQuery("Select * from futball", null);
-        c.moveToFirst();
-        int questionIndex = c.getColumnIndex("Question");
-        String s = "";
+    public int getSerialNumber(int n) {
         Random rand = new Random();
-        int n = 0;
-        int r_c = (int) getRowCount();
-        while (c != null && n < r_c) {
-            int pos = rand.nextInt(r_c);
-            Log.i("Question ", c.getString(questionIndex));
-            n++;
-            c.moveToPosition(pos);
-            Log.i("Position", Integer.toString(pos));
-            //c.moveToNext();
-        }
-        /*int pos = rand.nextInt(r_c);
-        c.moveToPosition(pos);
-        s = c.getString(optionAIndex);*/
+        return rand.nextInt(n);
+    }
 
-        return s;
+    public String getQuestion(String s, int n) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor c = db.rawQuery("Select * from fut", null);
+        c.moveToFirst();
+
+        int questionIndex = c.getColumnIndex("question");
+        int answerIndex = c.getColumnIndex("answer");
+
+        c.moveToPosition(n);
+
+        if (s.equals("Question")) {
+            return c.getString(questionIndex);
+        } else if (s.equals("Answer")) {
+            return c.getString(answerIndex);
+        } else
+            return "-1";
     }
 }
+

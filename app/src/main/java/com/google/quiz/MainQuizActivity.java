@@ -16,21 +16,29 @@ public class MainQuizActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_quiz);
-
+        TextView question = findViewById(R.id.question);
+        String Question = "";
+        String Answer = "";
+        int questionSerialNumber;
         Intent intent = getIntent();
-
         String quizCategory = intent.getStringExtra("QuizCategory");
-        Log.i("dds", quizCategory);
+
+
         //Deciding which database to Open and choose
         switch (quizCategory) {
             case "0":
                 Log.i("Category", "Football");
+
                 Football football = new Football(this);
                 football.createDatabase();
                 football.openDatabase();
                 football.getWritableDatabase();
-                String y = football.getOptionA();
-                long x = football.getRowCount();
+
+                int numberOfRows = (int) football.getRowCount();
+                questionSerialNumber = football.getSerialNumber(numberOfRows);
+                Question = football.getQuestion("Question", questionSerialNumber);
+                Answer = football.getQuestion("Answer", questionSerialNumber);
+
                 break;
             case "1":
                 Log.i("Category", "Cricket");
