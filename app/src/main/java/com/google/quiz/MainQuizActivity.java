@@ -20,10 +20,42 @@ public class MainQuizActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         String quizCategory = intent.getStringExtra("QuizCategory");
-//        TextView textView = findViewById(R.id.textView);
+        Log.i("dds", quizCategory);
+        //Deciding which database to Open and choose
+        switch (quizCategory) {
+            case "0":
+                Log.i("Category", "Football");
+                Football football = new Football(this);
+                football.createDatabase();
+                football.openDatabase();
+                football.getWritableDatabase();
+                String y = football.getOptionA();
+                long x = football.getRowCount();
+                break;
+            case "1":
+                Log.i("Category", "Cricket");
+                break;
+            case "2":
+                Log.i("Category", "General Knowledge");
+                break;
+            case "3":
+                Log.i("Category", "Books");
+                break;
+            case "4":
+                Log.i("Category", "Politics");
+                break;
+            case "5":
+                Log.i("Category", "Bollywood");
+                break;
+            case "6":
+                Log.i("Category", "TV Series");
+                break;
+            case "7":
+                Log.i("Category", "Misc");
+                break;
+            default:
+                Log.i("Message", "Error");
 
-  //      textView.setText(quizCategory);
-
-
+        }
     }
 }
