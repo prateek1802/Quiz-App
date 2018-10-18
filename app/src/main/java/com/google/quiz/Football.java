@@ -104,6 +104,26 @@ public class Football extends SQLiteOpenHelper {
         return rand.nextInt(n);
     }
 
+    public int getOption(int correctAnswerLocation, int numberRows) {
+        Random rand = new Random();
+        int x = rand.nextInt(numberRows);
+
+        while (x == correctAnswerLocation) {
+            x = rand.nextInt(numberRows);
+        }
+        return x;
+    }
+
+    public int getOption(int correctAnswerLocation, int optionA, int numberRows) {
+        Random rand = new Random();
+        int x = rand.nextInt(numberRows);
+
+        while (x == correctAnswerLocation || x == optionA) {
+            x = rand.nextInt(numberRows);
+        }
+        return x;
+    }
+
     public String getQuestion(String s, int n) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -121,6 +141,17 @@ public class Football extends SQLiteOpenHelper {
             return c.getString(answerIndex);
         } else
             return "-1";
+    }
+
+    public String getChoice(int x, int n) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor c = db.rawQuery("Select * from fut", null);
+        c.moveToPosition(x);
+
+        int choiceIndex = c.getColumnIndex("answer");
+
+        return c.getString(choiceIndex);
     }
 }
 
