@@ -8,10 +8,22 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Random;
+
 public class MainQuizActivity extends AppCompatActivity {
+
+    String Question = "";
+    String Answer = "";
+    String choiceOne = "", choiceTwo = "";
+
+    int numberOfRows;
+    int questionSerialNumber, optionOne, optionTwo;
 
     //Preventing going back to the previous Activity
     @Override
@@ -29,11 +41,6 @@ public class MainQuizActivity extends AppCompatActivity {
         Button b2 = findViewById(R.id.buttonTwo);
         Button b3 = findViewById(R.id.buttonThree);
 
-        String Question = "";
-        String Answer = "";
-        String choiceOne = "", choiceTwo = "";
-        int questionSerialNumber, optionOne, optionTwo;
-
         Intent intent = getIntent();
         String quizCategory = intent.getStringExtra("QuizCategory");
 
@@ -48,7 +55,7 @@ public class MainQuizActivity extends AppCompatActivity {
                 football.openDatabase();
                 football.getWritableDatabase();
 
-                int numberOfRows = (int) football.getRowCount();
+                numberOfRows = (int) football.getRowCount();
                 questionSerialNumber = football.getSerialNumber(numberOfRows);
                 optionOne = football.getOption(questionSerialNumber, numberOfRows);
                 optionTwo = football.getOption(questionSerialNumber, optionOne, numberOfRows);
@@ -59,9 +66,27 @@ public class MainQuizActivity extends AppCompatActivity {
                 choiceTwo = football.getChoice(optionTwo, numberOfRows);
 
                 break;
+
             case "1":
                 Log.i("Category", "Cricket");
+
+                Cricket cricket = new Cricket(this);
+                cricket.createDatabase();
+                cricket.openDatabase();
+                cricket.getWritableDatabase();
+
+                numberOfRows = (int) cricket.getRowCount();
+                questionSerialNumber = cricket.getSerialNumber(numberOfRows);
+                optionOne = cricket.getOption(questionSerialNumber, numberOfRows);
+                optionTwo = cricket.getOption(questionSerialNumber, optionOne, numberOfRows);
+
+                Question = cricket.getQuestion("Question", questionSerialNumber);
+                Answer = cricket.getQuestion("Answer", questionSerialNumber);
+                choiceOne = cricket.getChoice(optionOne, numberOfRows);
+                choiceTwo = cricket.getChoice(optionTwo, numberOfRows);
+
                 break;
+
             case "2":
                 Log.i("Category", "General Knowledge");
                 break;
