@@ -43,19 +43,25 @@
                 android:id="@+id/buttonOne"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:onClick="chosenOption"
+                android:tag="0" />
 
             <Button
                 android:id="@+id/buttonTwo"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:onClick="chosenOption"
+                android:tag="1" />
 
             <Button
                 android:id="@+id/buttonThree"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:onClick="chosenOption"
+                android:tag="2" />
 
         </LinearLayout>
 

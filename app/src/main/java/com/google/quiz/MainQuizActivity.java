@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,21 +15,35 @@ import org.w3c.dom.Text;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class MainQuizActivity extends AppCompatActivity {
 
-    String Question = "";
-    String Answer = "";
-    String choiceOne = "", choiceTwo = "";
+    protected String Question = "";
+    protected String Answer = "";
+    protected String choiceOne = "", choiceTwo = "";
 
-    int numberOfRows;
-    int questionSerialNumber, optionOne, optionTwo;
+    protected int numberOfRows;
+    protected int questionSerialNumber, optionOne, optionTwo;
+    protected int totalOptions = 3;
+    protected int locationCorrectAnswer;
+    protected int totalQuestion = 5;
+    Random rand = new Random();
 
     //Preventing going back to the previous Activity
     @Override
     public void onBackPressed() {
         return;
+    }
+
+    //When any Option is pressed
+    public void chosenOption(View view) {
+        if (view.getTag().toString().equals(Integer.toString(locationCorrectAnswer))) {
+            Toast.makeText(getApplicationContext(), "Correct!", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getApplicationContext(), "Wrong!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -110,8 +125,30 @@ public class MainQuizActivity extends AppCompatActivity {
         }
 
         question.setText(Question);
-        b1.setText(Answer);
-        b2.setText(choiceOne);
-        b3.setText(choiceTwo);
+
+        ArrayList<String> choice = new ArrayList<>();
+
+        choice.add(choiceOne);
+        choice.add(choiceTwo);
+
+        String[] answers = new String[totalOptions];
+        locationCorrectAnswer = rand.nextInt(totalOptions);
+        Log.i("Correct: ", Integer.toString(locationCorrectAnswer));
+
+        for (int i = 0; i < totalOptions; i++) {
+            if (i == locationCorrectAnswer) {
+                answers[i] = Answer;
+            } else {
+                int n = rand.nextInt(choice.size());
+                answers[i] = choice.get(n);
+                choice.remove(n);
+            }
+        }
+
+        b1.setText(answers[0]);
+        b2.setText(answers[1]);
+        b3.setText(answers[2]);
+
     }
+
 }
