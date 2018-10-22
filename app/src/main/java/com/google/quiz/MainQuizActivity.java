@@ -24,7 +24,7 @@ public class MainQuizActivity extends AppCompatActivity {
     TextView question;
     TextView category;
     TextView score;
-    
+
     Button b1, b2, b3;
 
     Football football;
@@ -40,6 +40,8 @@ public class MainQuizActivity extends AppCompatActivity {
     int locationCorrectAnswer;
     int totalQuestion = 8;
     int correctAnswer = 0;
+    int currentQuestion = 0;
+    int questionLength;
 
     ArrayList<String> choice = new ArrayList<>();
     String[] answers = new String[totalOptions];
@@ -59,6 +61,7 @@ public class MainQuizActivity extends AppCompatActivity {
         } else {
             Toast.makeText(getApplicationContext(), "Wrong!", Toast.LENGTH_SHORT).show();
         }
+        currentQuestion++;
         newQuestion(quizCategory);
     }
 
@@ -149,6 +152,14 @@ public class MainQuizActivity extends AppCompatActivity {
 
         }
 
+        if (questionLength < 35) {
+            question.setTextSize(45);
+        }
+        if (questionLength >= 35 && questionLength <= 50) {
+            question.setTextSize(40);
+        } else {
+            question.setTextSize(35);
+        }
         question.setText(Question);
 
         choice.add(choiceOne);
@@ -166,7 +177,7 @@ public class MainQuizActivity extends AppCompatActivity {
             }
         }
 
-        score.setText(Integer.toString(correctAnswer) + "/7");
+        score.setText(Integer.toString(correctAnswer) + "/" + Integer.toString(currentQuestion));
 
         b1.setText(answers[0]);
         b2.setText(answers[1]);
@@ -176,6 +187,12 @@ public class MainQuizActivity extends AppCompatActivity {
 
         if (totalQuestion == 0) {
             totalQuestion = 8;
+            int scorePassed = correctAnswer;
+            correctAnswer = 0;
+            currentQuestion = 0;
+            Intent intent = new Intent(getApplicationContext(), TotalScoreActivity.class);
+            intent.putExtra("Score", Integer.toString(scorePassed));
+            startActivity(intent);
         }
     }
 }

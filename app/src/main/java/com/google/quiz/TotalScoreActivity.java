@@ -8,6 +8,7 @@ import android.widget.TextView;
 public class TotalScoreActivity extends AppCompatActivity {
 
     TextView score;
+    String scoreGet;
 
     @Override
     public void onBackPressed() {
@@ -19,9 +20,11 @@ public class TotalScoreActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_total_score);
 
-//        Intent intent = getIntent();
-  //      String s = intent.getStringExtra("CorrectAnswer");
+        score = findViewById(R.id.score);
 
-        score.setTextSize(20);
+        Intent intent = getIntent();
+        scoreGet = intent.getStringExtra("Score");
+
+        score.setText("Your Score is : " + scoreGet + "/7");
     }
 }

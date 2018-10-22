@@ -21,14 +21,18 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/category"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:id="@+id/category"/>
+                android:layout_weight="1"
+                android:textSize="20dp" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/score"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:id="@+id/score"/>
+                android:layout_weight="1"
+                android:textSize="20dp" />
 
         </LinearLayout>
 
