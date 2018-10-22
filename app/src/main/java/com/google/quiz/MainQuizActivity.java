@@ -19,17 +19,31 @@ import java.util.List;
 import java.util.Random;
 
 public class MainQuizActivity extends AppCompatActivity {
-
-    protected String Question = "";
-    protected String Answer = "";
-    protected String choiceOne = "", choiceTwo = "";
-
-    protected int numberOfRows;
-    protected int questionSerialNumber, optionOne, optionTwo;
-    protected int totalOptions = 3;
-    protected int locationCorrectAnswer;
-    protected int totalQuestion = 5;
     Random rand = new Random();
+
+    TextView question;
+    TextView category;
+    TextView score;
+    
+    Button b1, b2, b3;
+
+    Football football;
+    Cricket cricket;
+
+    String Question = "";
+    String Answer = "";
+    String choiceOne = "", choiceTwo = "";
+
+    int numberOfRows;
+    int questionSerialNumber, optionOne, optionTwo;
+    int totalOptions = 3;
+    int locationCorrectAnswer;
+    int totalQuestion = 8;
+    int correctAnswer = 0;
+
+    ArrayList<String> choice = new ArrayList<>();
+    String[] answers = new String[totalOptions];
+    String quizCategory;
 
     //Preventing going back to the previous Activity
     @Override
@@ -41,9 +55,11 @@ public class MainQuizActivity extends AppCompatActivity {
     public void chosenOption(View view) {
         if (view.getTag().toString().equals(Integer.toString(locationCorrectAnswer))) {
             Toast.makeText(getApplicationContext(), "Correct!", Toast.LENGTH_SHORT).show();
+            correctAnswer++;
         } else {
             Toast.makeText(getApplicationContext(), "Wrong!", Toast.LENGTH_SHORT).show();
         }
+        newQuestion(quizCategory);
     }
 
     @Override
@@ -51,55 +67,34 @@ public class MainQuizActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_quiz);
 
-        TextView question = findViewById(R.id.question);
-        Button b1 = findViewById(R.id.buttonOne);
-        Button b2 = findViewById(R.id.buttonTwo);
-        Button b3 = findViewById(R.id.buttonThree);
-
         Intent intent = getIntent();
-        String quizCategory = intent.getStringExtra("QuizCategory");
+        quizCategory = intent.getStringExtra("QuizCategory");
 
+        category = findViewById(R.id.category);
+        score = findViewById(R.id.score);
+        question = findViewById(R.id.question);
+        b1 = findViewById(R.id.buttonOne);
+        b2 = findViewById(R.id.buttonTwo);
+        b3 = findViewById(R.id.buttonThree);
 
         //Deciding the quiz Category
         switch (quizCategory) {
             case "0":
-                Log.i("Category", "Football");
-
-                Football football = new Football(this);
+                football = new Football(this);
                 football.createDatabase();
                 football.openDatabase();
                 football.getWritableDatabase();
 
-                numberOfRows = (int) football.getRowCount();
-                questionSerialNumber = football.getSerialNumber(numberOfRows);
-                optionOne = football.getOption(questionSerialNumber, numberOfRows);
-                optionTwo = football.getOption(questionSerialNumber, optionOne, numberOfRows);
-
-                Question = football.getQuestion("Question", questionSerialNumber);
-                Answer = football.getQuestion("Answer", questionSerialNumber);
-                choiceOne = football.getChoice(optionOne, numberOfRows);
-                choiceTwo = football.getChoice(optionTwo, numberOfRows);
-
+                newQuestion(quizCategory);
                 break;
 
             case "1":
-                Log.i("Category", "Cricket");
-
-                Cricket cricket = new Cricket(this);
+                cricket = new Cricket(this);
                 cricket.createDatabase();
                 cricket.openDatabase();
                 cricket.getWritableDatabase();
 
-                numberOfRows = (int) cricket.getRowCount();
-                questionSerialNumber = cricket.getSerialNumber(numberOfRows);
-                optionOne = cricket.getOption(questionSerialNumber, numberOfRows);
-                optionTwo = cricket.getOption(questionSerialNumber, optionOne, numberOfRows);
-
-                Question = cricket.getQuestion("Question", questionSerialNumber);
-                Answer = cricket.getQuestion("Answer", questionSerialNumber);
-                choiceOne = cricket.getChoice(optionOne, numberOfRows);
-                choiceTwo = cricket.getChoice(optionTwo, numberOfRows);
-
+                newQuestion(quizCategory);
                 break;
 
             case "2":
@@ -124,16 +119,42 @@ public class MainQuizActivity extends AppCompatActivity {
                 Log.i("Message", "Error");
         }
 
-        question.setText(Question);
+    }
 
-        ArrayList<String> choice = new ArrayList<>();
+    public void newQuestion(String quizCategory) {
+        if (quizCategory.equals("0")) {
+            quizCategory = "0";
+            category.setText("Football");
+            numberOfRows = (int) football.getRowCount();
+            questionSerialNumber = football.getSerialNumber(numberOfRows);
+            optionOne = football.getOption(questionSerialNumber, numberOfRows);
+            optionTwo = football.getOption(questionSerialNumber, optionOne, numberOfRows);
+
+            Question = football.getQuestion("Question", questionSerialNumber);
+            Answer = football.getQuestion("Answer", questionSerialNumber);
+            choiceOne = football.getChoice(optionOne, numberOfRows);
+            choiceTwo = football.getChoice(optionTwo, numberOfRows);
+        } else if (quizCategory.equals("1")) {
+            category.setText("Cricket");
+            quizCategory = "1";
+            numberOfRows = (int) cricket.getRowCount();
+            questionSerialNumber = cricket.getSerialNumber(numberOfRows);
+            optionOne = cricket.getOption(questionSerialNumber, numberOfRows);
+            optionTwo = cricket.getOption(questionSerialNumber, optionOne, numberOfRows);
+
+            Question = cricket.getQuestion("Question", questionSerialNumber);
+            Answer = cricket.getQuestion("Answer", questionSerialNumber);
+            choiceOne = cricket.getChoice(optionOne, numberOfRows);
+            choiceTwo = cricket.getChoice(optionTwo, numberOfRows);
+
+        }
+
+        question.setText(Question);
 
         choice.add(choiceOne);
         choice.add(choiceTwo);
 
-        String[] answers = new String[totalOptions];
         locationCorrectAnswer = rand.nextInt(totalOptions);
-        Log.i("Correct: ", Integer.toString(locationCorrectAnswer));
 
         for (int i = 0; i < totalOptions; i++) {
             if (i == locationCorrectAnswer) {
@@ -145,10 +166,16 @@ public class MainQuizActivity extends AppCompatActivity {
             }
         }
 
+        score.setText(Integer.toString(correctAnswer) + "/7");
+
         b1.setText(answers[0]);
         b2.setText(answers[1]);
         b3.setText(answers[2]);
 
-    }
+        totalQuestion--;
 
+        if (totalQuestion == 0) {
+            totalQuestion = 8;
+        }
+    }
 }
